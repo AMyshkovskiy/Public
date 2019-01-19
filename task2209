@@ -11,7 +11,7 @@ public class Solution {
 
         while ((str = reader.readLine()) != null) {
 
-            strings = str.trim().split(" ");
+            strings = str.trim().split(" "); // помещаем слова в массим
 
         }
 
@@ -20,13 +20,13 @@ public class Solution {
     }
 
     public static StringBuilder getLine(String... words) {
-        //List<Integer> indexList = new ArrayList<>();
-        List<Integer> max = new ArrayList<>();
-        for (int i = 0; i < words.length; i++) {
-            List<Integer> indexList = new ArrayList<>();
-            indexList.add(i);
-            max = function(words, indexList, i, max);
-            //if (indexList.size() > max.size()) max = indexList;
+        
+        List<Integer> max = new ArrayList<>(); // массив для максимального количества индексов массива слов (читай для максимального количества слов, подходящих условию).
+        for (int i = 0; i < words.length; i++) { // проходим по всем словам массива, устанавливая "отправную точку" для рекурсивной функции
+            List<Integer> indexList = new ArrayList<>(); // создаем массив индексов массива слов
+            indexList.add(i); // добавляем "отправной индекс"
+            max = function(words, indexList, i, max); // запуск рекурсивной функции с начальными данными
+            
         }
 
         StringBuilder result = new StringBuilder();
@@ -39,23 +39,25 @@ public class Solution {
         return result;
     }
 
-    private static List<Integer> function (String[] words, List<Integer> ind, int lastIndex, List<Integer> max) {
-        StringBuilder result = new StringBuilder();
-        List<Integer> list = ind;
+    private static List<Integer> function (String[] words, List<Integer> ind, int lastIndex, List<Integer> max) { // рекурсивная функция, параметрами которой являются: исходный массив слов; массив индексов, входящих в последовательность; индекс крайнего элемента последовательности; массив индексов с максимальным размером
+        List<Integer> list = ind; // список индексов использованных на данный момент, сохраняем для того, чтобы использовать другие подходящие условию варианты последовательности предыдущего шага рекурсии
 
 
         for (int i = 0; i < words.length; i++) {
-            String endOfWord = words[lastIndex].substring(words[lastIndex].length() - 1);
-            String startOfWord = words[i].substring(0,1);
-            if (ind.contains(i)) continue;
-            else if (endOfWord.equalsIgnoreCase(startOfWord)) {
-                list.add(i);
-                max = function(words, list, i, max);
+            String endOfWord = words[lastIndex].substring(words[lastIndex].length() - 1); // символ конца крайнего слова последовательности 
+            if (ind.contains(i)) continue; // если индекс массива слов, присутствует в массиве индексов, пропускаем шаг
+            String startOfWord = words[i].substring(0,1); // символ начала слова, неиспользованного в последовательности
+            
+            else if (endOfWord.equalsIgnoreCase(startOfWord)) { // проверка соответствия условию
+                list.add(i); //добавляем индекс в массив индексов
+                max = function(words, list, i, max); //запускаем функцию для нового элемента последовательности
             }
 
         }
-        if (ind.size() > max.size()) max = new ArrayList<>(ind);
-        if (list.size() == ind.size()) ind.remove(ind.size() - 1);
+        if (ind.size() > max.size()) max = new ArrayList<>(ind); // формируем максимальный массив индексов
+        if (list.size() == ind.size()) ind.remove(ind.size() - 1); // если размер массива индексов не изменился, это означает, 
+        //что подходящих условию элементов для данного варианта последовательности нет, т.е. это уже конечный вариант последовательности.
+        //Удаляем крайний элемент последовательности, это позволяет предыдущему шагу рекурсии продолжить поиск возможного варианта более удачной последовательности
             return max;
     }
 }
