@@ -1,0 +1,61 @@
+public class Solution {
+    
+    public static void main(String[] args) throws IOException {
+        //...
+        BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
+        String filename = r.readLine();
+        FileReader fstream = new FileReader(filename);
+        BufferedReader reader = new BufferedReader(fstream);
+        String str = "";
+        String[] strings = null;
+
+        while ((str = reader.readLine()) != null) {
+
+            strings = str.trim().split(" ");
+
+        }
+
+        StringBuilder result = getLine(strings);
+        System.out.println(result.toString());
+    }
+
+    public static StringBuilder getLine(String... words) {
+        //List<Integer> indexList = new ArrayList<>();
+        List<Integer> max = new ArrayList<>();
+        for (int i = 0; i < words.length; i++) {
+            List<Integer> indexList = new ArrayList<>();
+            indexList.add(i);
+            max = function(words, indexList, i, max);
+            //if (indexList.size() > max.size()) max = indexList;
+        }
+
+        StringBuilder result = new StringBuilder();
+        for (Integer integer : max) {
+            result.append(words[integer] + " ");
+        }
+        result = new StringBuilder(result.toString().trim());
+
+
+        return result;
+    }
+
+    private static List<Integer> function (String[] words, List<Integer> ind, int lastIndex, List<Integer> max) {
+        StringBuilder result = new StringBuilder();
+        List<Integer> list = ind;
+
+
+        for (int i = 0; i < words.length; i++) {
+            String endOfWord = words[lastIndex].substring(words[lastIndex].length() - 1);
+            String startOfWord = words[i].substring(0,1);
+            if (ind.contains(i)) continue;
+            else if (endOfWord.equalsIgnoreCase(startOfWord)) {
+                list.add(i);
+                max = function(words, list, i, max);
+            }
+
+        }
+        if (ind.size() > max.size()) max = new ArrayList<>(ind);
+        if (list.size() == ind.size()) ind.remove(ind.size() - 1);
+            return max;
+    }
+}
